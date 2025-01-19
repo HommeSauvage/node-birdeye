@@ -1,0 +1,55 @@
+{
+	"name": "node-birdeye",
+	"version": "0.1.0",
+	"type": "module",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/HommeSauvage/node-birdeye.git"
+	},
+	"homepage": "https://github.com/HommeSauvage/node-birdeye#readme",
+	"bugs": {
+		"url": "https://github.com/HommeSauvage/node-birdeye/issues"
+	},
+	"description": "Birdeye API client for Node.js",
+	"keywords": ["birdeye", "api", "defi"],
+	"license": "MIT",
+	"exports": {
+		".": {
+			"types": "./dist/birdeye.d.ts",
+			"import": "./dist/esm/birdeye.js",
+			"require": "./dist/cjs/birdeye.js"
+		}
+	},
+	"main": "./dist/cjs/birdeye.js",
+	"module": "./dist/esm/birdeye.js",
+	"types": "./dist/birdeye.d.ts",
+	"files": ["dist"],
+	"scripts": {
+		"build": "rm -rf dist && npm run build:esm && npm run build:cjs && npm run build:types",
+		"build:esm": "swc src --strip-leading-paths -d dist/esm",
+		"build:cjs": "swc src --strip-leading-paths -d dist/cjs --config-file .swcrc-cjs",
+		"build:types": "tsc --emitDeclarationOnly --outDir dist",
+		"format": "biome format . --write",
+		"lint": "biome lint .",
+		"check": "biome check .",
+		"test": "bun test",
+		"typecheck": "tsc --noEmit",
+		"changeset": "changeset",
+		"version": "changeset version",
+		"release": "npm run build && changeset publish"
+	},
+	"dependencies": {
+		"@swc/helpers": "^0.5.15"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.9.4",
+		"@changesets/cli": "^2.27.11",
+		"@swc/cli": "^0.6.0",
+		"@swc/core": "^1.10.7",
+		"@types/bun": "^1.1.17",
+		"typescript": "^5.7.3"
+	},
+	"publishConfig": {
+		"access": "public"
+	}
+}

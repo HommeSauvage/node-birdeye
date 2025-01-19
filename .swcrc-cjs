@@ -1,0 +1,14 @@
+{
+	"$schema": "https://swc.rs/schema.json",
+	"module": {
+		"type": "commonjs",
+		"importInterop": "node"
+	},
+	"jsc": {
+		"externalHelpers": true,
+		"target": "es2015",
+		"parser": {
+			"syntax": "typescript"
+		}
+	}
+}

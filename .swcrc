@@ -1,0 +1,14 @@
+{
+	"$schema": "https://swc.rs/schema.json",
+	"module": {
+		"type": "es6",
+		"resolveFully": true
+	},
+	"jsc": {
+		"externalHelpers": true,
+		"target": "esnext",
+		"parser": {
+			"syntax": "typescript"
+		}
+	}
+}
