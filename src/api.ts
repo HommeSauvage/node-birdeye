@@ -1,9 +1,5 @@
 import type { Chain } from './constants'
-import {
-	type EnhandedFetchResult,
-	type FetchMetadata,
-	enhancedFetch,
-} from './utils/enhanced-fetch'
+import { type FetchMetadata, enhancedFetch } from './utils/enhanced-fetch'
 import {
 	PROBLEM_EXTERNAL,
 	type Problem,
@@ -11,7 +7,7 @@ import {
 	isAProblem,
 	makeProblem,
 } from './utils/problem'
-import { Err } from './utils/result'
+import { Err, type PromisedResult, type StandardResult } from './utils/result'
 
 export type StandardApiParams = {
 	/**
@@ -87,7 +83,7 @@ export class Api<DefaultChain extends Chain = 'solana'> {
 	async fetch<T>(
 		path: string,
 		params?: FetchParams,
-	): Promise<EnhandedFetchResult<T, { success: false; message: string }>> {
+	): PromisedResult<T, FetchMetadata, FetchMetadata> {
 		const baseUrl = params?.baseUrl ?? this.baseUrl
 
 		const body = params?.body
@@ -103,24 +99,27 @@ export class Api<DefaultChain extends Chain = 'solana'> {
 					}
 				: {}
 
-		const result = await enhancedFetch<T, { success: false; message: string }>(
-			`${baseUrl}${path}${query}`,
-			{
-				method: params?.method ?? 'GET',
-				headers: {
-					'X-API-KEY': this.apiKey,
-					...chainHeader,
-				},
-				body,
+		const result = await enhancedFetch<
+			T | { success: false; message?: string },
+			{ success: false; message?: string }
+		>(`${baseUrl}${path}${query}`, {
+			method: params?.method ?? 'GET',
+			headers: {
+				'X-API-KEY': this.apiKey,
+				...chainHeader,
 			},
-		)
+			body,
+		})
 
-		if (result.ok && !(result.val as any).success) {
+		if (
+			result.ok &&
+			typeof result.val === 'object' &&
+			result.val !== null &&
+			'success' in result.val &&
+			!(result.val as any).success
+		) {
 			return new Err<Problem, FetchMetadata>(
-				makeProblem(
-					PROBLEM_EXTERNAL,
-					(result.val as any).message ?? 'Unknown error',
-				),
+				makeProblem(PROBLEM_EXTERNAL, result.val.message ?? 'Unknown error'),
 				result.metadata,
 			)
 		}
@@ -129,13 +128,13 @@ export class Api<DefaultChain extends Chain = 'solana'> {
 			return new Err<Problem, FetchMetadata>(
 				makeProblem(
 					getCodeForStatus(result.metadata?.status || 500),
-					result.val.message,
+					result.val.message ?? 'Unknown error',
 				),
 				result.metadata,
 			)
 		}
 
-		return result
+		return result as StandardResult<T, FetchMetadata, FetchMetadata>
 	}
 
 	setBaseUrl(url: string) {

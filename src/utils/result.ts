@@ -41,7 +41,7 @@ export type ResultErrType<T extends Result<any, any>> = T extends Result<
 
 export type StandardResult<R = unknown, MS = unknown, ME = MS> = Result<
 	R,
-	Problem | { success: false; message: string },
+	Problem,
 	MS,
 	ME
 >
