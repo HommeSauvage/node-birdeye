@@ -1,6 +1,6 @@
 {
 	"name": "node-birdeye",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"type": "module",
 	"repository": {
 		"type": "git",
@@ -11,7 +11,11 @@
 		"url": "https://github.com/HommeSauvage/node-birdeye/issues"
 	},
 	"description": "Birdeye API client for Node.js",
-	"keywords": ["birdeye", "api", "defi"],
+	"keywords": [
+		"birdeye",
+		"api",
+		"defi"
+	],
 	"license": "MIT",
 	"exports": {
 		".": {
@@ -23,7 +27,9 @@
 	"main": "./dist/cjs/birdeye.js",
 	"module": "./dist/esm/birdeye.js",
 	"types": "./dist/birdeye.d.ts",
-	"files": ["dist"],
+	"files": [
+		"dist"
+	],
 	"scripts": {
 		"build": "rm -rf dist && npm run build:esm && npm run build:cjs && npm run build:types",
 		"build:esm": "swc src --strip-leading-paths -d dist/esm",
