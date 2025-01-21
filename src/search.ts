@@ -1,10 +1,10 @@
-import type { Api, StandardApiParams } from './api'
+import type { Api, PromisedApiResult, StandardApiParams } from './api'
 import type { Chain } from './constants'
 import {
 	type StringsToDates,
 	stringsOrNumbersToDates,
 } from './utils/converters'
-import { Ok, type PromisedResult } from './utils/result'
+import { Ok } from './utils/result'
 import type { ListResponse, Market, SortType } from './utils/types'
 import { wrapWithThrow } from './utils/wrap-utils'
 
@@ -159,7 +159,7 @@ class SearchFetcher {
 	async search(
 		params: SearchParams,
 		apiParams?: Omit<StandardApiParams, 'chain'>,
-	): PromisedResult<SearchResponse> {
+	): PromisedApiResult<SearchResponse> {
 		const queryParams: FinalSearchParams = {
 			chain: 'all',
 			target: 'all',

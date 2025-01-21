@@ -23,6 +23,12 @@ export type StandardApiParamsWithAllChains = Omit<
 	chain?: StandardApiParams['chain'] | 'all'
 }
 
+export type PromisedApiResult<T> = PromisedResult<
+	T,
+	FetchMetadata,
+	FetchMetadata
+>
+
 type QueryParamValue =
 	| string
 	| number
@@ -80,10 +86,7 @@ export class Api<DefaultChain extends Chain = 'solana'> {
 		return searchParams
 	}
 
-	async fetch<T>(
-		path: string,
-		params?: FetchParams,
-	): PromisedResult<T, FetchMetadata, FetchMetadata> {
+	async fetch<T>(path: string, params?: FetchParams): PromisedApiResult<T> {
 		const baseUrl = params?.baseUrl ?? this.baseUrl
 
 		const body = params?.body

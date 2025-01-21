@@ -1,9 +1,9 @@
-import type { Api, StandardApiParams } from './api'
+import type { Api, PromisedApiResult, StandardApiParams } from './api'
 import {
 	type StringsToDates,
 	stringsOrNumbersToDates,
 } from './utils/converters'
-import { Ok, type PromisedResult } from './utils/result'
+import { Ok } from './utils/result'
 import { wrapWithThrow } from './utils/wrap-utils'
 
 export type Pair = ReturnType<typeof createPair>
@@ -120,7 +120,7 @@ class PairFetcher {
 	async overview(
 		params: PairOverviewParams,
 		apiParams?: StandardApiParams,
-	): PromisedResult<PairOverviewResponse> {
+	): PromisedApiResult<PairOverviewResponse> {
 		const result = await this.api.fetch<{ data: PairOverviewResponseRaw }>(
 			`${this.#base}/overview/multiple`,
 			{
@@ -142,7 +142,7 @@ class PairFetcher {
 	async overviewMultiple(
 		params: PairOverviewMultipleParams,
 		apiParams?: StandardApiParams,
-	): PromisedResult<PairOverviewMultipleResponse> {
+	): PromisedApiResult<PairOverviewMultipleResponse> {
 		const result = await this.api.fetch<{
 			data: PairOverviewMultipleResponseRaw
 		}>(`${this.#base}/overview/multiple`, {

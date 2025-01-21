@@ -1,11 +1,12 @@
 import type {
 	Api,
+	PromisedApiResult,
 	StandardApiParams,
 	StandardApiParamsWithAllChains,
 } from './api'
 import type { Chain } from './constants'
 import { datesToNumbers } from './utils/converters'
-import { Ok, type PromisedResult } from './utils/result'
+import { Ok } from './utils/result'
 import type { ListResponse, SortType, TransactionType } from './utils/types'
 import { wrapWithThrow } from './utils/wrap-utils'
 
@@ -96,7 +97,7 @@ class TraderFetcher {
 	async gainersLosers(
 		params: TraderGainersLosersParams,
 		apiParams?: StandardApiParamsWithAllChains,
-	): PromisedResult<TraderGainersLosersResponse> {
+	): PromisedApiResult<TraderGainersLosersResponse> {
 		const queryParams: TraderGainersLosersParams = {
 			type: '1W',
 			sort_by: 'PnL',

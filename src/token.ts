@@ -1,4 +1,4 @@
-import type { Api, StandardApiParams } from './api'
+import type { Api, PromisedApiResult, StandardApiParams } from './api'
 import type { Chain } from './constants'
 import {
 	type HoldersParams,
@@ -47,7 +47,7 @@ import {
 	stringsOrNumbersToDates,
 	stringsToNumbers,
 } from './utils/converters'
-import { Ok, type PromisedResult } from './utils/result'
+import { Ok } from './utils/result'
 import { wrapWithThrow } from './utils/wrap-utils'
 
 export type Token = ReturnType<typeof createToken>
@@ -70,7 +70,7 @@ export class TokenFetcher {
 	async list(
 		params: TokenListParams,
 		apiParams?: StandardApiParams,
-	): PromisedResult<TokenListResponse> {
+	): PromisedApiResult<TokenListResponse> {
 		const result = await this.api.fetch<{ data: TokenListResponse }>(
 			`${this.#base}/tokenlist`,
 			{
@@ -96,7 +96,7 @@ export class TokenFetcher {
 	async security<ApiParams extends StandardApiParams>(
 		params: TokenSecurityParams,
 		apiParams?: ApiParams,
-	): PromisedResult<TokenSecurityResponse<ApiParams['chain']>> {
+	): PromisedApiResult<TokenSecurityResponse<ApiParams['chain']>> {
 		const result = await this.api.fetch<{
 			data: TokenSecurityResponseRaw<ApiParams['chain']>
 		}>(`${this.#base}/token_security`, {
@@ -148,7 +148,7 @@ export class TokenFetcher {
 	async overview(
 		params: TokenOverviewParams,
 		apiParams?: StandardApiParams,
-	): PromisedResult<TokenOverviewResponse> {
+	): PromisedApiResult<TokenOverviewResponse> {
 		const result = await this.api.fetch<{ data: TokenOverviewResponseRaw }>(
 			`${this.#base}/token_overview`,
 			{
@@ -172,7 +172,7 @@ export class TokenFetcher {
 	async creationTokenInfo(
 		params: TokenCreationInfoParams,
 		apiParams?: StandardApiParams,
-	): PromisedResult<TokenCreationInfoResponse> {
+	): PromisedApiResult<TokenCreationInfoResponse> {
 		const result = await this.api.fetch<{ data: TokenCreationInfoResponseRaw }>(
 			`${this.#base}/token_creation_info`,
 			{
@@ -195,7 +195,7 @@ export class TokenFetcher {
 	async trendingList(
 		params: TrendingListParams,
 		apiParams?: StandardApiParams,
-	): PromisedResult<TrendingListResponse> {
+	): PromisedApiResult<TrendingListResponse> {
 		const result = await this.api.fetch<{ data: TrendingListResponse }>(
 			`${this.#base}/trending_list`,
 			{
@@ -224,7 +224,7 @@ export class TokenFetcher {
 	 * returned in the response. This removes the need for the limit response
 	 * of the previous version and reduces the workload of making multiple calls.
 	 */
-	async listV2(apiParams?: StandardApiParams): PromisedResult<any> {
+	async listV2(apiParams?: StandardApiParams): PromisedApiResult<any> {
 		const result = await this.api.fetch<{ data: AnalyserOptions }>(
 			`${this.#base}/v2/tokens/all`,
 			apiParams,
@@ -243,7 +243,7 @@ export class TokenFetcher {
 	async newListings<C extends Chain | null | undefined>(
 		params: NewListingsParams<C>,
 		apiParams?: StandardApiParams,
-	): PromisedResult<NewListingsResponse> {
+	): PromisedApiResult<NewListingsResponse> {
 		const result = await this.api.fetch<{ data: NewListingsResponseRaw }>(
 			`${this.#base}/v2/tokens/new_listing`,
 			{
@@ -276,7 +276,7 @@ export class TokenFetcher {
 	async topTraders(
 		params: TopTradersParams,
 		apiParams?: StandardApiParams,
-	): PromisedResult<TopTradersResponse> {
+	): PromisedApiResult<TopTradersResponse> {
 		const result = await this.api.fetch<{ data: TopTradersResponse }>(
 			`${this.#base}/v2/tokens/top_traders`,
 			{
@@ -310,7 +310,7 @@ export class TokenFetcher {
 	async markets(
 		params: MarketsParams,
 		apiParams?: StandardApiParams,
-	): PromisedResult<MarketsResponse> {
+	): PromisedApiResult<MarketsResponse> {
 		const result = await this.api.fetch<{ data: MarketsResponseRaw }>(
 			`${this.#base}/v2/markets`,
 			{
@@ -343,7 +343,7 @@ export class TokenFetcher {
 	async metadata(
 		params: TokenMetadataParams,
 		apiParams?: StandardApiParams,
-	): PromisedResult<TokenMetadataResponse> {
+	): PromisedApiResult<TokenMetadataResponse> {
 		const result = await this.api.fetch<{ data: TokenMetadataResponse }>(
 			`${this.#base}/v3/token/meta-data/single`,
 			{
@@ -365,7 +365,7 @@ export class TokenFetcher {
 	async metadataMultiple(
 		params: TokenMetadataMultipleParams,
 		apiParams?: StandardApiParams,
-	): PromisedResult<TokenMetadataMultipleResponse> {
+	): PromisedApiResult<TokenMetadataMultipleResponse> {
 		const result = await this.api.fetch<{
 			data: TokenMetadataMultipleResponse
 		}>(`${this.#base}/v3/token/meta-data/multiple`, {
@@ -386,7 +386,7 @@ export class TokenFetcher {
 	async marketData(
 		params: MarketDataParams,
 		apiParams?: StandardApiParams,
-	): PromisedResult<MarketDataResponse> {
+	): PromisedApiResult<MarketDataResponse> {
 		const result = await this.api.fetch<{ data: MarketDataResponse }>(
 			`${this.#base}/v3/token/market-data`,
 			{
@@ -408,7 +408,7 @@ export class TokenFetcher {
 	async tradeData(
 		params: TradeDataParams,
 		apiParams?: StandardApiParams,
-	): PromisedResult<TradeDataResponse> {
+	): PromisedApiResult<TradeDataResponse> {
 		const result = await this.api.fetch<{ data: TradeDataResponse }>(
 			`${this.#base}/v3/token/trade-data/single`,
 			{
@@ -430,7 +430,7 @@ export class TokenFetcher {
 	async tradeDataMultiple(
 		params: TradeDataMultipleParams,
 		apiParams?: StandardApiParams,
-	): PromisedResult<TradeDataMultipleResponse> {
+	): PromisedApiResult<TradeDataMultipleResponse> {
 		const result = await this.api.fetch<{ data: TradeDataMultipleResponse }>(
 			`${this.#base}/v3/token/trade-data/multiple`,
 			{
@@ -452,7 +452,7 @@ export class TokenFetcher {
 	async holders(
 		params: HoldersParams,
 		apiParams?: StandardApiParams,
-	): PromisedResult<HoldersResponse> {
+	): PromisedApiResult<HoldersResponse> {
 		const result = await this.api.fetch<{ data: HoldersResponse }>(
 			`${this.#base}/v3/token/holders`,
 			{
@@ -479,7 +479,7 @@ export class TokenFetcher {
 		apiParams?: Omit<StandardApiParams, 'chain'> & {
 			chain: 'solana'
 		},
-	): PromisedResult<MintBurnResponse> {
+	): PromisedApiResult<MintBurnResponse> {
 		const result = await this.api.fetch<{ data: MintBurnResponseRaw }>(
 			`${this.#base}/v3/token/mint-burn-txs`,
 			{

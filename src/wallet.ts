@@ -1,10 +1,10 @@
-import type { Api, StandardApiParams } from './api'
+import type { Api, PromisedApiResult, StandardApiParams } from './api'
 import type { Chain } from './constants'
 import {
 	type StringsToDates,
 	stringsOrNumbersToDates,
 } from './utils/converters'
-import { Ok, type PromisedResult } from './utils/result'
+import { Ok } from './utils/result'
 import type { ListResponse } from './utils/types'
 import { wrapWithThrow } from './utils/wrap-utils'
 
@@ -146,7 +146,7 @@ class WalletFetcher {
 	async portfolio(
 		params: WalletPortfolioParams,
 		apiParams?: StandardApiParams,
-	): PromisedResult<WalletPortfolioResponse> {
+	): PromisedApiResult<WalletPortfolioResponse> {
 		const result = await this.api.fetch<{ data: WalletPortfolioResponse }>(
 			`${this.#base}/portfolio`,
 			{
@@ -168,7 +168,7 @@ class WalletFetcher {
 	async tokenBalance(
 		params: WalletTokenBalanceParams,
 		apiParams?: StandardApiParams,
-	): PromisedResult<TokenHolding> {
+	): PromisedApiResult<TokenHolding> {
 		const result = await this.api.fetch<{ data: TokenHolding }>(
 			`${this.#base}/token_balance`,
 			{
@@ -190,7 +190,7 @@ class WalletFetcher {
 	async transactionHistory<ApiParams extends StandardApiParams>(
 		params: WalletTransactionHistoryParams<ApiParams['chain']>,
 		apiParams?: ApiParams,
-	): PromisedResult<WalletTransactionHistoryResponse<ApiParams['chain']>> {
+	): PromisedApiResult<WalletTransactionHistoryResponse<ApiParams['chain']>> {
 		const result = await this.api.fetch<{
 			data: WalletTransactionHistoryResponseRaw<ApiParams['chain']>
 		}>(`${this.#base}/tx_list`, {

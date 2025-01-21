@@ -1,4 +1,4 @@
-import type { Api, StandardApiParams } from './api'
+import type { Api, PromisedApiResult, StandardApiParams } from './api'
 import type {
 	ByTimeParams,
 	DefiOHLCVByBaseQuoteData,
@@ -22,7 +22,7 @@ import type {
 	WithTimeParams,
 } from './defi.types'
 import { datesToNumbers, stringsOrNumbersToDates } from './utils/converters'
-import { Ok, type PromisedResult } from './utils/result'
+import { Ok } from './utils/result'
 import type { ListResponse } from './utils/types'
 import { wrapWithThrow } from './utils/wrap-utils'
 
@@ -39,7 +39,7 @@ class DefiFetcher {
 	/**
 	 * Get a list of all supported networks.
 	 */
-	async supportedNetworks(): PromisedResult<Array<string>> {
+	async supportedNetworks(): PromisedApiResult<Array<string>> {
 		const result = await this.api.fetch<{ data: Array<string> }>(
 			`${this.#base}/networks`,
 		)
@@ -56,7 +56,7 @@ class DefiFetcher {
 	async price(
 		params: DefiPriceParams,
 		apiParams?: StandardApiParams,
-	): PromisedResult<DefiPriceResponse> {
+	): PromisedApiResult<DefiPriceResponse> {
 		const result = await this.api.fetch<{ data: DefiPriceResponseRaw | null }>(
 			`${this.#base}/price`,
 			{
@@ -81,7 +81,7 @@ class DefiFetcher {
 	async priceMultiple(
 		params: DefiPriceMultipleParams,
 		apiParams?: StandardApiParams,
-	): PromisedResult<DefiPriceMultipleResponse> {
+	): PromisedApiResult<DefiPriceMultipleResponse> {
 		const result = await this.api.fetch<{
 			data: { [key: string]: DefiPriceResponseRaw }
 		}>(`${this.#base}/multi_price`, {
@@ -108,7 +108,7 @@ class DefiFetcher {
 	async priceHistorical(
 		params: DefiPriceHistoricalParams,
 		apiParams?: StandardApiParams,
-	): PromisedResult<DefiPriceHistoricalResponse> {
+	): PromisedApiResult<DefiPriceHistoricalResponse> {
 		const result = await this.api.fetch<{
 			data: DefiPriceHistoricalResponse
 		}>(`${this.#base}/history_price`, {
@@ -135,7 +135,7 @@ class DefiFetcher {
 	async priceHistoricalByUnixTimestamp(
 		params: DefiPriceHistoricalByUnixTimestampParams,
 		apiParams?: StandardApiParams,
-	): PromisedResult<DefiPriceHistoricalByUnixTimestampResponse> {
+	): PromisedApiResult<DefiPriceHistoricalByUnixTimestampResponse> {
 		const result = await this.api.fetch<{
 			data: DefiPriceHistoricalByUnixTimestampResponse
 		}>(`${this.#base}/historical_price_unix`, {
@@ -156,7 +156,7 @@ class DefiFetcher {
 		apiType: '/token' | '/token/seek_by_time' | '/pair' | '/pair/seek_by_time',
 		params: DefiTradesParams,
 		apiParams?: StandardApiParams,
-	): PromisedResult<DefiTradesResponse> {
+	): PromisedApiResult<DefiTradesResponse> {
 		const result = await this.api.fetch<{
 			data: DefiTradesResponse
 		}>(`${this.#base}/txs${apiType}`, {
@@ -184,7 +184,7 @@ class DefiFetcher {
 	async tradesByToken(
 		params: DefiTradesParams,
 		apiParams?: StandardApiParams,
-	): PromisedResult<DefiTradesResponse> {
+	): PromisedApiResult<DefiTradesResponse> {
 		return await this.trades(
 			'sort_type' in params ? '/token' : '/token/seek_by_time',
 			{
@@ -202,7 +202,7 @@ class DefiFetcher {
 	async tradesByPair(
 		params: DefiTradesParams,
 		apiParams?: StandardApiParams,
-	): PromisedResult<DefiTradesResponse> {
+	): PromisedApiResult<DefiTradesResponse> {
 		return await this.trades(
 			'sort_type' in params ? '/pair' : '/pair/seek_by_time',
 			{
@@ -221,7 +221,7 @@ class DefiFetcher {
 	async ohlcv<P extends DefiOHLCVParams>(
 		{ address_type, ...params }: P,
 		apiParams?: StandardApiParams,
-	): PromisedResult<
+	): PromisedApiResult<
 		ListResponse<
 			P extends { address_type: 'base_quote' }
 				? DefiOHLCVByBaseQuoteData
@@ -261,7 +261,7 @@ class DefiFetcher {
 	async priceVolume(
 		params: DefiPriceVolumeParams,
 		apiParams?: StandardApiParams,
-	): PromisedResult<DefiPriceVolumeResponse> {
+	): PromisedApiResult<DefiPriceVolumeResponse> {
 		const result = await this.api.fetch<{
 			data: DefiPriceVolumeResponse
 		}>(`${this.#base}/price_volume/single`, {
@@ -284,7 +284,7 @@ class DefiFetcher {
 	async priceVolumeMulti(
 		params: DefiPriceVolumeMultiParams,
 		apiParams?: StandardApiParams,
-	): PromisedResult<DefiPriceMultiVolumeResponse> {
+	): PromisedApiResult<DefiPriceMultiVolumeResponse> {
 		const result = await this.api.fetch<{
 			data: DefiPriceMultiVolumeResponse
 		}>(`${this.#base}/price_volume/multi`, {
